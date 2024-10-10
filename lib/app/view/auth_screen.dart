@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:sonoflow/app/components/auth_card.dart';
+
+/* ===== AUTH SCREEN =====
+* */
+class AuthScreen extends StatelessWidget {
+  const AuthScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+            color: Color.fromRGBO(12, 31, 61, 1),
+            image: DecorationImage(
+                image: AssetImage('lib/app/assets/auth_background.png'),
+                fit: BoxFit.cover)),
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // ===== LOGO =====
+              Image.asset('lib/app/assets/sonoflow-logo.png'),
+              // ===== CARD =====
+              const SingleChildScrollView(child: AuthCard()),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
