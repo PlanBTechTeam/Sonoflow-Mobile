@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/app/view/auth_screen.dart';
+import 'package:sonoflow/presentation/provider/auth_provider.dart';
+import 'package:sonoflow/presentation/view/auth_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthScreen(),
+      home: const AuthProvider(),
     );
   }
 }
