@@ -30,7 +30,7 @@ class _InputAuthState extends State<InputAuth> {
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Row(
           children: [
-            Icon(widget.icon, color: Color.fromRGBO(161, 161, 161, 1)),
+            Icon(widget.icon, color: const Color.fromRGBO(161, 161, 161, 1)),
             const SizedBox(width: 16),
             Expanded(
                 child: TextField(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/app/utils/auth_mode.dart';
+import 'package:sonoflow/presentation/utils/auth_mode.dart';
+
 
 /* ===== TOGGLE AUTH BUTTON=====
 * */

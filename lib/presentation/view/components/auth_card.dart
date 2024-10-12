@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/app/components/auth_input.dart';
-import 'package:sonoflow/app/components/photo_input.dart';
-import 'package:sonoflow/app/components/toggle_auth_button.dart';
-import 'package:sonoflow/app/utils/auth_mode.dart';
+import 'package:sonoflow/presentation/utils/auth_mode.dart';
+import 'package:sonoflow/presentation/view/components/auth_input.dart';
+import 'package:sonoflow/presentation/view/components/photo_input.dart';
+import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
+
 
 /* ===== AUTH CARD =====
 * */

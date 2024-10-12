@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/app/components/auth_card.dart';
+import 'package:sonoflow/presentation/view/components/auth_card.dart';
+
 
 /* ===== AUTH SCREEN =====
 * */
@@ -15,7 +16,7 @@ class AuthScreen extends StatelessWidget {
         decoration: const BoxDecoration(
             color: Color.fromRGBO(12, 31, 61, 1),
             image: DecorationImage(
-                image: AssetImage('lib/app/assets/auth_background.png'),
+                image: AssetImage('assets/auth_background.png'),
                 fit: BoxFit.cover)),
         child: Padding(
           padding: const EdgeInsets.all(32.0),
@@ -23,7 +24,7 @@ class AuthScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // ===== LOGO =====
-              Image.asset('lib/app/assets/sonoflow-logo.png'),
+              Image.asset('assets/sonoflow-logo.png'),
               // ===== CARD =====
               const SingleChildScrollView(child: AuthCard()),
             ],
