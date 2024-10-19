@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sonoflow/presentation/utils/colors.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -14,10 +15,15 @@ class SettingScreen extends StatelessWidget {
                 topRight: Radius.circular(32), topLeft: Radius.circular(32)),
             color: Colors.white,
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(32),
-            child: Center(
-              child: Text('SETTING SCREEN'),
+          child: Padding(
+            padding: const EdgeInsets.all(32),
+            child: Column(
+              children: [
+
+                const Center(
+                  child: Text('SETTING SCREEN'),
+                ),
+              ],
             ),
           ),
         ),
