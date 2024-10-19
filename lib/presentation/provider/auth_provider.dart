@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/presentation/view/dashboard_screen.dart';
-import 'package:sonoflow/presentation/view/home_screen.dart';
-import 'package:sonoflow/presentation/view/setting_screen.dart';
+import 'package:sonoflow/presentation/utils/colors.dart';
+import 'package:sonoflow/presentation/view/dashboard/dashboard_screen.dart';
+import 'package:sonoflow/presentation/view/home/home_screen.dart';
+import 'package:sonoflow/presentation/view/settings/setting_screen.dart';
 
 class AuthProvider extends StatefulWidget {
   const AuthProvider({super.key});
@@ -30,12 +31,18 @@ class _AuthProviderState extends State<AuthProvider> {
             image: DecorationImage(
                 image: AssetImage('assets/auth_background.png'),
                 fit: BoxFit.cover)),
-        child: Center(
-          child: body[_currentIndex],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            const Image(image: AssetImage("assets/sonoflow-logo.png")),
+            Center(
+              child: body[_currentIndex],
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: const Color.fromRGBO(240, 208, 51, 1),
+        selectedItemColor: AppColors.lemonYellow,
         currentIndex: _currentIndex,
         onTap: (int newIndex) {
           setState(() {
