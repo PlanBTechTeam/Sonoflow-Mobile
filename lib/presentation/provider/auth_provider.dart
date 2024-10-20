@@ -42,7 +42,7 @@ class _AuthProviderState extends State<AuthProvider> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: AppColors.lemonYellow,
+        selectedItemColor: AppColors.goldenYellow,
         currentIndex: _currentIndex,
         onTap: (int newIndex) {
           setState(() {
