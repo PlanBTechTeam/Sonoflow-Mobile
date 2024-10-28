@@ -9,6 +9,7 @@ class AppColors {
   static const Color goldenYellow = Color.fromRGBO(196, 162, 90, 1);
   static const Color ghostWhite = Color.fromRGBO(245, 245, 253, 1);
   static const Color steelBlue = Color.fromRGBO(94, 105, 128, 0.2);
+  static const Color whiteSmoke = Color.fromRGBO(255, 255, 255, 0.1);
   static const LinearGradient linearBlueGradient = LinearGradient(
     colors: [
       Color.fromRGBO(16, 28, 66, 1),
