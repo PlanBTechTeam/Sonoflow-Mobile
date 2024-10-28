@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sonoflow/firebase_options.dart';
 import 'package:sonoflow/presentation/provider/auth_provider.dart';
 import 'package:sonoflow/presentation/viewmodel/change_layer_viewmodel.dart';
+import 'package:sonoflow/presentation/viewmodel/diarycard_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,8 +13,11 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ChangeLayerViewmodel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ChangeLayerViewmodel()),
+        ChangeNotifierProvider(create: (context) => DiaryCardViewModel()),
+      ],
       child: const MyApp(),
     ),
   );
