@@ -6,7 +6,7 @@ class ChangeLayerViewmodel extends ChangeNotifier {
 
   // Constantes para os limites das camadas
   int minLayer = 0;
-  int maxLayer = 9;
+  int maxLayer = 11;
 
   // Getter para acessar o valor atual da camada
   int get layer => _layer;
