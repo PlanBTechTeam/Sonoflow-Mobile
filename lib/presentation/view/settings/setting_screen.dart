@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonoflow/presentation/utils/colors.dart';
+import 'package:sonoflow/presentation/view/auth/auth_screen.dart';
 
 class SettingScreen extends StatelessWidget {
   const SettingScreen({super.key});
@@ -15,7 +16,7 @@ class SettingScreen extends StatelessWidget {
                 topRight: Radius.circular(32), topLeft: Radius.circular(32)),
             color: Colors.white,
           ),
-          child: Padding(
+          child:  Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
               children: [
@@ -23,6 +24,9 @@ class SettingScreen extends StatelessWidget {
                 const Center(
                   child: Text('SETTING SCREEN'),
                 ),
+                ElevatedButton(onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
+                }, child: const Text('SAIR'))
               ],
             ),
           ),
