@@ -48,7 +48,7 @@ class FirebaseAuthService {
         uid: userCredential!.uid,
         username: username,
         email: userCredential.email!,
-        registrationDate: DateTime.now(),
+        registrationDate: userCredential.metadata.creationTime!,
         sleepGoal: sleepGoal,
         // TODO: profilePictureUrl
       );
