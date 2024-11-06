@@ -3,7 +3,7 @@ class UserModel {
   final String username;
   final String email;
   final DateTime registrationDate;
-  final String? profilePictureUrl;
+  final String? photoUrl;
   final int? sleepGoal;
 
   UserModel({
@@ -11,7 +11,7 @@ class UserModel {
     required this.username,
     required this.email,
     required this.registrationDate,
-    this.profilePictureUrl,
+    this.photoUrl,
     this.sleepGoal,
   });
 }
