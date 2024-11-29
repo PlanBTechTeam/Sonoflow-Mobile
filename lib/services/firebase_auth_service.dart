@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sonoflow/models/user_model.dart';
+import 'package:sonoflow/services/firebase_storage_service.dart';
 import 'package:sonoflow/services/firestore_service.dart';
 
 /// Serviço de autenticação Firebase.
@@ -9,6 +10,7 @@ import 'package:sonoflow/services/firestore_service.dart';
 /// Oferece métodos para autenticação de usuários utilizando o Firebase Authentication.
 class FirebaseAuthService {
   final FirestoreService _firestoreService = FirestoreService();
+  final FirebaseStorageService _storage = FirebaseStorageService();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   /// Verifica se o usuário está autenticado.
@@ -45,6 +47,11 @@ class FirebaseAuthService {
       var userCredential = credential.user;
 
       // TODO: salvar imagem
+      String? pictureUrl = picture != null
+          ? await _storage.uploadUserProfilePicture(
+              "${userCredential!.uid}-photoURL.png", picture)
+          // TODO: placeholder image if null
+          : null;
 
       UserModel user = UserModel(
         uid: userCredential!.uid,
@@ -52,7 +59,7 @@ class FirebaseAuthService {
         email: userCredential.email!,
         registrationDate: userCredential.metadata.creationTime!,
         sleepGoal: sleepGoal,
-        // TODO: profilePictureUrl
+        photoUrl: pictureUrl,
       );
 
       _firestoreService.registerUser(user);

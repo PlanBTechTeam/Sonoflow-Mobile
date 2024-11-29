@@ -34,4 +34,18 @@ class FirebaseStorageService {
       return null;
     }
   }
+
+  /// Faz o upload da foto de perfil de um usuário para o Firebase Storage.
+  ///
+  /// [fileName]: O nome do arquivo a ser salvo no Firebase Storage.
+  /// [file]: O conteúdo do arquivo em formato binário.
+  ///
+  /// Retorna a URL pública da foto de perfil carregada como uma `String` em caso de sucesso,
+  /// ou `null` em caso de falha.
+  ///
+  /// Utiliza [uploadFile] para salvar o arquivo na subpasta `student_pictures`
+  /// dentro do Firebase Storage.
+  Future<String?> uploadUserProfilePicture(
+          String fileName, Uint8List file) async =>
+      await uploadFile("student_pictures/$fileName", file);
 }
