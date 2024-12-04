@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
-import 'package:sonoflow/presentation/utils/colors.dart';
 import 'package:sonoflow/presentation/view/components/auth_input.dart';
+import 'package:sonoflow/presentation/view/components/login_button.dart';
 import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
 
@@ -20,13 +20,14 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   AuthMode _authMode = AuthMode.LOGIN;
   int _registerLayer = 1; // Variável para controlar a camada de registro
-  int _maxRegisterLauer =2;
+  final int _maxRegisterLauer = 2;
+
   // ===== BUTTON TO CHANGE AUTH MODE STATE =====
   // Função que alterna entre os modos Login e Registro.
   void _toggleAuthMode() {
     setState(() {
       _authMode =
-      _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
+          _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
     });
   }
 
@@ -51,7 +52,8 @@ class _AuthCardState extends State<AuthCard> {
           border: Border.all(
               color: const Color.fromRGBO(255, 255, 255, 0.4), width: 2)),
       child: Padding(
-        padding: const EdgeInsets.only(top: 32,bottom: 32,left: 16,right: 16),
+        padding:
+            const EdgeInsets.only(top: 32, bottom: 32, left: 16, right: 16),
         child: Column(
           children: [
             // ========== TOGGLE AUTH BUTTON ==========
@@ -112,18 +114,10 @@ class _AuthCardState extends State<AuthCard> {
                 icon: Icons.lock,
               ),
               const SizedBox(height: 16),
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColors.goldenYellow)),
-                        child: const Text(
-                          'Entrar',
-                          style: TextStyle(color: AppColors.midnightBlue),
-                        )),
+                    child: LoginButton(text: "Entrar"),
                   ),
                 ],
               )
@@ -176,21 +170,19 @@ class _AuthCardState extends State<AuthCard> {
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            if(_registerLayer < _maxRegisterLauer){
-                              _registerLayer = _registerLayer + 1;
-                            }
-                          });
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColors.goldenYellow)),
-                        child: Text(_registerLayer == 1 || _registerLayer == 2
-                            ? 'CONTINUAR'
-                            : 'REGISTRAR',style: const TextStyle(color: AppColors.midnightBlue),)),
-                    
+                    child: _registerLayer == 1 || _registerLayer == 2
+                        ? LoginButton(
+                            text: "CONTINUAR",
+                            onPressed: () {
+                              _updateRegisterLayer();
+                            },
+                          )
+                        : LoginButton(
+                            text: "REGISTRAR",
+                            onPressed: () {
+                              _updateRegisterLayer();
+                            },
+                          ),
                   ),
                   Text(_registerLayer.toString())
                 ],
@@ -200,5 +192,13 @@ class _AuthCardState extends State<AuthCard> {
         ),
       ),
     );
+  }
+
+  void _updateRegisterLayer() {
+    setState(() {
+      if (_registerLayer < _maxRegisterLauer) {
+        _registerLayer = _registerLayer + 1;
+      }
+    });
   }
 }
