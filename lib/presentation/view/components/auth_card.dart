@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
 import 'package:sonoflow/presentation/view/components/auth_input.dart';
 import 'package:sonoflow/presentation/view/components/login_button.dart';
 import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
+import 'package:sonoflow/services/firebase_auth_service.dart';
 
 /* ===== AUTH CARD =====
  * Widget principal para exibir o cartão de autenticação.
@@ -22,6 +24,9 @@ class _AuthCardState extends State<AuthCard> {
   int _registerLayer = 1; // Variável para controlar a camada de registro
   final int _maxRegisterLauer = 2;
 
+  // ===== SERVICES =====
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
   // ===== BUTTON TO CHANGE AUTH MODE STATE =====
   // Função que alterna entre os modos Login e Registro.
   void _toggleAuthMode() {
@@ -35,10 +40,13 @@ class _AuthCardState extends State<AuthCard> {
   // Controladores de texto para manipular dados dos campos de Login e Registro.
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
+
   final registerEmailController = TextEditingController();
   final confirmRegisterEmailController = TextEditingController();
+
   final registerPasswordController = TextEditingController();
   final confirmRegisterPasswordController = TextEditingController();
+
   final usernameController = TextEditingController();
 
   // ==================================================
@@ -173,15 +181,11 @@ class _AuthCardState extends State<AuthCard> {
                     child: _registerLayer == 1 || _registerLayer == 2
                         ? LoginButton(
                             text: "CONTINUAR",
-                            onPressed: () {
-                              _updateRegisterLayer();
-                            },
+                            onPressed: _updateRegisterLayer,
                           )
                         : LoginButton(
                             text: "REGISTRAR",
-                            onPressed: () {
-                              _updateRegisterLayer();
-                            },
+                            onPressed: _register,
                           ),
                   ),
                   Text(_registerLayer.toString())
@@ -200,5 +204,57 @@ class _AuthCardState extends State<AuthCard> {
         _registerLayer = _registerLayer + 1;
       }
     });
+  }
+
+  // TODO: handle profile picture
+  void _register() async {
+    String username = usernameController.text;
+    String email = registerEmailController.text;
+    String confirmEmail = confirmRegisterEmailController.text;
+    String password = registerPasswordController.text;
+    String confirmPassword = confirmRegisterPasswordController.text;
+
+    // TODO: null checks + error messages
+    if (email != confirmEmail) {
+      // TODO: error
+      return;
+    }
+
+    if (password != confirmPassword) {
+      // TODO: error
+      return;
+    }
+
+    User? user;
+
+    try {
+      user = await _auth.registerWithUserInformation(
+        username: username, email: email, password: password,
+        // TODO
+        // sleepGoal: ,
+        // picture: ,
+      );
+    } on FirebaseAuthException catch (fbException) {
+      switch (fbException.code) {
+        case "email-already-in-use":
+          // TODO: error
+          break;
+
+        case "weak-password":
+          // TODO: error
+          break;
+
+        default:
+          // TODO: error
+          break;
+      }
+    } catch (e) {
+      // TODO: error
+      return;
+    }
+
+    if (user != null) {
+      // TODO: navigate to Home
+    }
   }
 }
