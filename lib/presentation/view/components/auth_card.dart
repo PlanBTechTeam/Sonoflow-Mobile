@@ -122,10 +122,13 @@ class _AuthCardState extends State<AuthCard> {
                 icon: Icons.lock,
               ),
               const SizedBox(height: 16),
-              const Row(
+              Row(
                 children: [
                   Expanded(
-                    child: LoginButton(text: "Entrar"),
+                    child: LoginButton(
+                      text: "Entrar",
+                      onPressed: _login,
+                    ),
                   ),
                 ],
               )
@@ -251,6 +254,47 @@ class _AuthCardState extends State<AuthCard> {
     } catch (e) {
       // TODO: error
       return;
+    }
+
+    if (user != null) {
+      // TODO: navigate to Home
+    }
+  }
+
+  void _login() async {
+    String email = loginEmailController.text;
+    String password = loginPasswordController.text;
+
+    User? user;
+
+    try {
+      user = await _auth.loginWithEmailAndPassword(email, password);
+    } on FirebaseAuthException catch (fbException) {
+      switch (fbException.code) {
+        case "invalid-email":
+          // TODO: error
+          break;
+        case "user-disabled":
+          // TODO: error
+          break;
+        case "user-not-found":
+          // TODO: error
+          break;
+        case "wrong-password":
+          // TODO: error
+          break;
+        case "too-many-requests":
+          // TODO: error
+          break;
+        case "invalid-credential":
+          // TODO: error
+          break;
+        default:
+          // TODO: error
+          break;
+      }
+    } catch (e) {
+      // TODO: error
     }
 
     if (user != null) {
