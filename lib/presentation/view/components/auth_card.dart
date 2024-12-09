@@ -5,7 +5,7 @@ import 'package:sonoflow/presentation/view/components/auth_input.dart';
 import 'package:sonoflow/presentation/view/components/login_button.dart';
 import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
-import 'package:sonoflow/services/firebase_auth_service.dart';
+import 'package:sonoflow/presentation/viewmodel/auth_viewmodel.dart';
 
 /* ===== AUTH CARD =====
  * Widget principal para exibir o cartão de autenticação.
@@ -25,7 +25,7 @@ class _AuthCardState extends State<AuthCard> {
   final int _maxRegisterLauer = 2;
 
   // ===== SERVICES =====
-  final FirebaseAuthService _auth = FirebaseAuthService();
+  final AuthViewModel _authViewModel = AuthViewModel();
 
   // ===== BUTTON TO CHANGE AUTH MODE STATE =====
   // Função que alterna entre os modos Login e Registro.
@@ -209,7 +209,6 @@ class _AuthCardState extends State<AuthCard> {
     });
   }
 
-  // TODO: handle profile picture
   void _register() async {
     String username = usernameController.text;
     String email = registerEmailController.text;
@@ -229,28 +228,14 @@ class _AuthCardState extends State<AuthCard> {
     }
 
     User? user;
-
     try {
-      user = await _auth.registerWithUserInformation(
-        username: username, email: email, password: password,
-        // TODO
-        // sleepGoal: ,
-        // picture: ,
+      user = await _authViewModel.register(
+        username: username,
+        email: email,
+        password: password,
       );
     } on FirebaseAuthException catch (fbException) {
-      switch (fbException.code) {
-        case "email-already-in-use":
-          // TODO: error
-          break;
-
-        case "weak-password":
-          // TODO: error
-          break;
-
-        default:
-          // TODO: error
-          break;
-      }
+      _handleAuthErrors(fbException.code);
     } catch (e) {
       // TODO: error
       return;
@@ -268,37 +253,58 @@ class _AuthCardState extends State<AuthCard> {
     User? user;
 
     try {
-      user = await _auth.loginWithEmailAndPassword(email, password);
+      user = await _authViewModel.login(
+        email: email,
+        password: password,
+      );
     } on FirebaseAuthException catch (fbException) {
-      switch (fbException.code) {
-        case "invalid-email":
-          // TODO: error
-          break;
-        case "user-disabled":
-          // TODO: error
-          break;
-        case "user-not-found":
-          // TODO: error
-          break;
-        case "wrong-password":
-          // TODO: error
-          break;
-        case "too-many-requests":
-          // TODO: error
-          break;
-        case "invalid-credential":
-          // TODO: error
-          break;
-        default:
-          // TODO: error
-          break;
-      }
+      _handleAuthErrors(fbException.code);
     } catch (e) {
       // TODO: error
     }
 
     if (user != null) {
       // TODO: navigate to Home
+    }
+  }
+
+  void _handleAuthErrors(String exceptionCode) {
+    switch (exceptionCode) {
+      case "email-already-in-use":
+        // TODO: error
+        break;
+
+      case "weak-password":
+        // TODO: error
+        break;
+
+      case "invalid-email":
+        // TODO: error
+        break;
+
+      case "user-disabled":
+        // TODO: error
+        break;
+
+      case "user-not-found":
+        // TODO: error
+        break;
+
+      case "wrong-password":
+        // TODO: error
+        break;
+
+      case "too-many-requests":
+        // TODO: error
+        break;
+
+      case "invalid-credential":
+        // TODO: error
+        break;
+
+      default:
+        // TODO: error
+        break;
     }
   }
 }
