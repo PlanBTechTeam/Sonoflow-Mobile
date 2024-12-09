@@ -5,7 +5,7 @@ import 'package:sonoflow/services/firebase_auth_service.dart';
 ///
 /// Atua como uma camada intermediária entre a interface do usuário e os serviços
 /// de autenticação, encapsulando a lógica para registro e login de usuários.
-class AuthViewModel {
+class AuthViewmodel {
   final FirebaseAuthService _auth = FirebaseAuthService();
 
   /// Registra um novo usuário.

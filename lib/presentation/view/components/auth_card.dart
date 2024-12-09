@@ -25,7 +25,7 @@ class _AuthCardState extends State<AuthCard> {
   final int _maxRegisterLauer = 2;
 
   // ===== SERVICES =====
-  final AuthViewModel _authViewModel = AuthViewModel();
+  final AuthViewmodel _authViewModel = AuthViewmodel();
 
   // ===== BUTTON TO CHANGE AUTH MODE STATE =====
   // Função que alterna entre os modos Login e Registro.
