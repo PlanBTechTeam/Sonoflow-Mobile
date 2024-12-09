@@ -219,11 +219,13 @@ class _AuthCardState extends State<AuthCard> {
     // TODO: null checks + error messages
     if (email != confirmEmail) {
       // TODO: error
+      print("Emails diferentes");
       return;
     }
 
     if (password != confirmPassword) {
       // TODO: error
+      print("Senhas diferentes");
       return;
     }
 
@@ -238,6 +240,7 @@ class _AuthCardState extends State<AuthCard> {
       _handleAuthErrors(fbException.code);
     } catch (e) {
       // TODO: error
+      print(e);
       return;
     }
 
@@ -261,6 +264,7 @@ class _AuthCardState extends State<AuthCard> {
       _handleAuthErrors(fbException.code);
     } catch (e) {
       // TODO: error
+      print(e);
     }
 
     if (user != null) {
@@ -272,38 +276,47 @@ class _AuthCardState extends State<AuthCard> {
     switch (exceptionCode) {
       case "email-already-in-use":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "weak-password":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "invalid-email":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "user-disabled":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "user-not-found":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "wrong-password":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "too-many-requests":
         // TODO: error
+        print(exceptionCode);
         break;
 
       case "invalid-credential":
         // TODO: error
+        print(exceptionCode);
         break;
 
       default:
         // TODO: error
+        print(exceptionCode);
         break;
     }
   }
