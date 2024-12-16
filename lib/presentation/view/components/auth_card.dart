@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
-import 'package:sonoflow/presentation/utils/colors.dart';
 import 'package:sonoflow/presentation/view/components/auth_input.dart';
+import 'package:sonoflow/presentation/view/components/login_button.dart';
 import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
+import 'package:sonoflow/presentation/viewmodel/auth_viewmodel.dart';
 
 /* ===== AUTH CARD =====
  * Widget principal para exibir o cartão de autenticação.
@@ -20,13 +22,17 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   AuthMode _authMode = AuthMode.LOGIN;
   int _registerLayer = 1; // Variável para controlar a camada de registro
-  int _maxRegisterLauer =2;
+  final int _maxRegisterLayer = 3;
+
+  // ===== SERVICES =====
+  final AuthViewmodel _authViewModel = AuthViewmodel();
+
   // ===== BUTTON TO CHANGE AUTH MODE STATE =====
   // Função que alterna entre os modos Login e Registro.
   void _toggleAuthMode() {
     setState(() {
       _authMode =
-      _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
+          _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
     });
   }
 
@@ -34,10 +40,13 @@ class _AuthCardState extends State<AuthCard> {
   // Controladores de texto para manipular dados dos campos de Login e Registro.
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
+
   final registerEmailController = TextEditingController();
   final confirmRegisterEmailController = TextEditingController();
+
   final registerPasswordController = TextEditingController();
   final confirmRegisterPasswordController = TextEditingController();
+
   final usernameController = TextEditingController();
 
   // ==================================================
@@ -51,7 +60,8 @@ class _AuthCardState extends State<AuthCard> {
           border: Border.all(
               color: const Color.fromRGBO(255, 255, 255, 0.4), width: 2)),
       child: Padding(
-        padding: const EdgeInsets.only(top: 32,bottom: 32,left: 16,right: 16),
+        padding:
+            const EdgeInsets.only(top: 32, bottom: 32, left: 16, right: 16),
         child: Column(
           children: [
             // ========== TOGGLE AUTH BUTTON ==========
@@ -115,15 +125,10 @@ class _AuthCardState extends State<AuthCard> {
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColors.goldenYellow)),
-                        child: const Text(
-                          'Entrar',
-                          style: TextStyle(color: AppColors.midnightBlue),
-                        )),
+                    child: LoginButton(
+                      text: "Entrar",
+                      onPressed: _login,
+                    ),
                   ),
                 ],
               )
@@ -176,21 +181,15 @@ class _AuthCardState extends State<AuthCard> {
               Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            if(_registerLayer < _maxRegisterLauer){
-                              _registerLayer = _registerLayer + 1;
-                            }
-                          });
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.all(AppColors.goldenYellow)),
-                        child: Text(_registerLayer == 1 || _registerLayer == 2
-                            ? 'CONTINUAR'
-                            : 'REGISTRAR',style: const TextStyle(color: AppColors.midnightBlue),)),
-                    
+                    child: _registerLayer == 1 || _registerLayer == 2
+                        ? LoginButton(
+                            text: "CONTINUAR",
+                            onPressed: _updateRegisterLayer,
+                          )
+                        : LoginButton(
+                            text: "REGISTRAR",
+                            onPressed: _register,
+                          ),
                   ),
                   Text(_registerLayer.toString())
                 ],
@@ -200,5 +199,119 @@ class _AuthCardState extends State<AuthCard> {
         ),
       ),
     );
+  }
+
+  void _updateRegisterLayer() {
+    setState(() {
+      if (_registerLayer < _maxRegisterLayer) {
+        _registerLayer = _registerLayer + 1;
+      }
+    });
+  }
+
+  void _register() async {
+    String username = usernameController.text;
+    String email = registerEmailController.text;
+    String confirmEmail = confirmRegisterEmailController.text;
+    String password = registerPasswordController.text;
+    String confirmPassword = confirmRegisterPasswordController.text;
+
+    // TODO: null checks + error messages
+    if (email != confirmEmail) {
+      // TODO: error
+      print("Emails diferentes");
+      return;
+    }
+
+    if (password != confirmPassword) {
+      // TODO: error
+      print("Senhas diferentes");
+      return;
+    }
+
+    User? user;
+    try {
+      user = await _authViewModel.register(
+        username: username,
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (fbException) {
+      _handleAuthErrors(fbException.code);
+    } catch (e) {
+      // TODO: error
+      print(e);
+      return;
+    }
+
+    if (user != null) {
+      // TODO: navigate to Home
+      print("registrado");
+    }
+  }
+
+  void _login() async {
+    String email = loginEmailController.text;
+    String password = loginPasswordController.text;
+
+    User? user;
+
+    try {
+      user = await _authViewModel.login(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (fbException) {
+      _handleAuthErrors(fbException.code);
+    } catch (e) {
+      // TODO: error
+      print(e);
+    }
+
+    if (user != null) {
+      // TODO: navigate to Home
+      print("login");
+    }
+  }
+
+  // TODO: error handling
+  void _handleAuthErrors(String exceptionCode) {
+    switch (exceptionCode) {
+      case "email-already-in-use":
+        print(exceptionCode);
+        break;
+
+      case "weak-password":
+        print(exceptionCode);
+        break;
+
+      case "invalid-email":
+        print(exceptionCode);
+        break;
+
+      case "user-disabled":
+        print(exceptionCode);
+        break;
+
+      case "user-not-found":
+        print(exceptionCode);
+        break;
+
+      case "wrong-password":
+        print(exceptionCode);
+        break;
+
+      case "too-many-requests":
+        print(exceptionCode);
+        break;
+
+      case "invalid-credential":
+        print(exceptionCode);
+        break;
+
+      default:
+        print(exceptionCode);
+        break;
+    }
   }
 }
