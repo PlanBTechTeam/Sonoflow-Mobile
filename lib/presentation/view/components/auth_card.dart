@@ -22,7 +22,7 @@ class AuthCard extends StatefulWidget {
 class _AuthCardState extends State<AuthCard> {
   AuthMode _authMode = AuthMode.LOGIN;
   int _registerLayer = 1; // Variável para controlar a camada de registro
-  final int _maxRegisterLauer = 2;
+  final int _maxRegisterLayer = 3;
 
   // ===== SERVICES =====
   final AuthViewmodel _authViewModel = AuthViewmodel();
@@ -203,7 +203,7 @@ class _AuthCardState extends State<AuthCard> {
 
   void _updateRegisterLayer() {
     setState(() {
-      if (_registerLayer < _maxRegisterLauer) {
+      if (_registerLayer < _maxRegisterLayer) {
         _registerLayer = _registerLayer + 1;
       }
     });
@@ -246,6 +246,7 @@ class _AuthCardState extends State<AuthCard> {
 
     if (user != null) {
       // TODO: navigate to Home
+      print("registrado");
     }
   }
 
@@ -269,53 +270,46 @@ class _AuthCardState extends State<AuthCard> {
 
     if (user != null) {
       // TODO: navigate to Home
+      print("login");
     }
   }
 
+  // TODO: error handling
   void _handleAuthErrors(String exceptionCode) {
     switch (exceptionCode) {
       case "email-already-in-use":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "weak-password":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "invalid-email":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "user-disabled":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "user-not-found":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "wrong-password":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "too-many-requests":
-        // TODO: error
         print(exceptionCode);
         break;
 
       case "invalid-credential":
-        // TODO: error
         print(exceptionCode);
         break;
 
       default:
-        // TODO: error
         print(exceptionCode);
         break;
     }
