@@ -2,27 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-/**
- * Widget que permite selecionar uma imagem da galeria e exibi-la
- * em um contêiner circular. Exibe um ícone padrão caso nenhuma
- * imagem seja escolhida.
- */
-class ImagePickerWidget extends StatefulWidget {
-  @override
-  _ImagePickerWidgetState createState() => _ImagePickerWidgetState();
-}
+/// Widget que permite selecionar uma imagem da galeria e exibi-la
+/// em um contêiner circular. Exibe um ícone padrão caso nenhuma
+/// imagem seja escolhida.
+class ImagePickerWidget extends StatelessWidget {
+  final File? image;
+  final void Function(File?) onImagePicked;
 
-class _ImagePickerWidgetState extends State<ImagePickerWidget> {
-  File? _image;
+  const ImagePickerWidget({
+    super.key,
+    required this.image,
+    required this.onImagePicked,
+  });
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      setState(() {
-        _image = File(pickedFile.path);
-      });
+      final imageFile = File(pickedFile.path);
+      onImagePicked(imageFile);
     }
   }
 
@@ -39,11 +38,11 @@ class _ImagePickerWidgetState extends State<ImagePickerWidget> {
             ),
             width: 150,
             height: 150,
-            child: _image == null
+            child: image == null
                 ? const Icon(Icons.add_a_photo, size: 50)
                 : ClipOval(
                     child: Image.file(
-                      _image!,
+                      image!,
                       fit: BoxFit.cover,
                     ),
                   ),
