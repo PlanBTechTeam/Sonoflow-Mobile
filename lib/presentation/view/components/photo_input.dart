@@ -5,11 +5,11 @@ import 'dart:io';
 /// Widget que permite selecionar uma imagem da galeria e exibi-la
 /// em um contêiner circular. Exibe um ícone padrão caso nenhuma
 /// imagem seja escolhida.
-class ImagePickerWidget extends StatelessWidget {
+class PhotoInput extends StatelessWidget {
   final File? image;
   final void Function(File?) onImagePicked;
 
-  const ImagePickerWidget({
+  const PhotoInput({
     super.key,
     required this.image,
     required this.onImagePicked,

@@ -177,7 +177,7 @@ class _AuthCardState extends State<AuthCard> {
                 const SizedBox(height: 16),
               ],
               if (_registerLayer == 3) ...[
-                ImagePickerWidget(
+                PhotoInput(
                   image: _selectedImage,
                   onImagePicked: _handleImagePicked,
                 ),
