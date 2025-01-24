@@ -247,6 +247,7 @@ class _AuthCardState extends State<AuthCard> {
         username: username,
         email: email,
         password: password,
+        picture: _selectedImage,
       );
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
