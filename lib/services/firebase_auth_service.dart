@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,15 +47,16 @@ class FirebaseAuthService {
 
       var userCredential = credential.user;
 
-      // TODO: salvar imagem
-      String? pictureUrl = picture != null
-          ? await _storage.uploadUserProfilePicture(
-              "${userCredential!.uid}-photoURL.png", picture)
-          // TODO: placeholder image if null
-          : null;
+      String? pictureUrl = await _storage.uploadUserProfilePicture(
+        "${userCredential!.uid}-photoURL.png",
+        (picture != null)
+            ? picture
+            : await File('assets/public/missing_profile_picture.jpg')
+                .readAsBytes(),
+      );
 
       UserModel user = UserModel(
-        uid: userCredential!.uid,
+        uid: userCredential.uid,
         username: username,
         email: userCredential.email!,
         registrationDate: userCredential.metadata.creationTime!,

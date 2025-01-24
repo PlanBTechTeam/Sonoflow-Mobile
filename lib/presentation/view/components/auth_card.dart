@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
@@ -7,11 +9,10 @@ import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
 import 'package:sonoflow/presentation/viewmodel/auth_viewmodel.dart';
 
-/* ===== AUTH CARD =====
- * Widget principal para exibir o cartão de autenticação.
- * Inclui formulários de entrada para modos de Login e Registro,
- * alternando entre camadas diferentes no Registro.
- */
+/// ===== AUTH CARD ===== <br>
+/// Widget principal para exibir o cartão de autenticação. <br>
+/// Inclui formulários de entrada para modos de Login e Registro,
+/// alternando entre camadas diferentes no Registro.
 class AuthCard extends StatefulWidget {
   const AuthCard({super.key});
 
@@ -48,6 +49,14 @@ class _AuthCardState extends State<AuthCard> {
   final confirmRegisterPasswordController = TextEditingController();
 
   final usernameController = TextEditingController();
+
+  // ===== IMAGE =====
+  // Atributos e métodos relacionados à seleção da imagem de perfil
+  File? _selectedImage;
+
+  void _handleImagePicked(File? image) => setState(() {
+        _selectedImage = image;
+      });
 
   // ==================================================
 
@@ -168,7 +177,10 @@ class _AuthCardState extends State<AuthCard> {
                 const SizedBox(height: 16),
               ],
               if (_registerLayer == 3) ...[
-                ImagePickerWidget(),
+                PhotoInput(
+                  image: _selectedImage,
+                  onImagePicked: _handleImagePicked,
+                ),
                 InputAuth(
                   controller: usernameController,
                   hintText: 'Nome',
@@ -235,6 +247,7 @@ class _AuthCardState extends State<AuthCard> {
         username: username,
         email: email,
         password: password,
+        picture: _selectedImage,
       );
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);

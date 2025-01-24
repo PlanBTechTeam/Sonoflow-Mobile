@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:sonoflow/services/firebase_auth_service.dart';
 
@@ -13,24 +15,25 @@ class AuthViewmodel {
   /// [username]: Nome de usuário do novo usuário.<br>
   /// [email]: Endereço de e-mail do novo usuário.<br>
   /// [password]: Senha escolhida pelo novo usuário.<br>
+  /// [picture]: Imagem de perfil do novo usuário.<br>
   ///
   /// Chama o método [FirebaseAuthService.registerWithUserInformation]
   /// para completar o registro.
   ///
-  /// Retorna um objeto [User] em caso de sucesso ou lança uma [FirebaseAuthException] em caso de erro.
-  ///
-  /// TODO: handle profile picture
+  /// Retorna um objeto [User] em caso de sucesso ou lança uma
+  /// [FirebaseAuthException] em caso de erro.
   Future<User?> register({
     required String username,
     required String email,
     required String password,
+    required File? picture,
   }) async {
     try {
       return await _auth.registerWithUserInformation(
-        username: username, email: email, password: password,
-        // TODO
-        // sleepGoal: ,
-        // picture: ,
+        username: username,
+        email: email,
+        password: password,
+        picture: await picture?.readAsBytes(),
       );
     } on FirebaseAuthException {
       rethrow;
@@ -45,7 +48,8 @@ class AuthViewmodel {
   /// Chama o método [FirebaseAuthService.loginWithEmailAndPassword]
   /// para autenticar o usuário.
   ///
-  /// Retorna um objeto [User] em caso de sucesso ou lança uma [FirebaseAuthException] em caso de erro.
+  /// Retorna um objeto [User] em caso de sucesso ou lança uma
+  /// [FirebaseAuthException] em caso de erro.
   Future<User?> login({
     required String email,
     required String password,
