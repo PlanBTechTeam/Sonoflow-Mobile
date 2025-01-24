@@ -224,16 +224,13 @@ class _AuthCardState extends State<AuthCard> {
     String password = registerPasswordController.text;
     String confirmPassword = confirmRegisterPasswordController.text;
 
-    // TODO: null checks + error messages
     if (email != confirmEmail) {
-      // TODO: error
-      print("Emails diferentes");
+      _showInfoToast('Erro: os e-mails informados são diferentes.', Colors.red);
       return;
     }
 
     if (password != confirmPassword) {
-      // TODO: error
-      print("Senhas diferentes");
+      _showInfoToast('Erro: as senhas informadas são diferentes.', Colors.red);
       return;
     }
 
@@ -248,14 +245,13 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      // TODO: error
-      print(e);
+      _showInfoToast('Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
       return;
     }
 
     if (user != null) {
       // TODO: navigate to Home
-      print("registrado");
+      _showInfoToast('Usuário $username registrado com sucesso.', Colors.green);
     }
   }
 
@@ -273,13 +269,12 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      // TODO: error
-      print(e);
+      _showInfoToast('Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
     }
 
     if (user != null) {
+      _showInfoToast('Login efetuado com sucesso.', Colors.green);
       // TODO: navigate to Home
-      print("login");
     }
   }
 
