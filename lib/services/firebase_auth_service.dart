@@ -1,7 +1,5 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:sonoflow/models/user_model.dart';
 import 'package:sonoflow/services/firebase_storage_service.dart';
 import 'package:sonoflow/services/firestore_service.dart';
@@ -47,12 +45,12 @@ class FirebaseAuthService {
 
       var userCredential = credential.user;
 
+      picture ??=
+          await rootBundle.load('assets/public/missing_profile_picture.jpg').then((data) => data.buffer.asUint8List());
+
       String? pictureUrl = await _storage.uploadUserProfilePicture(
         "${userCredential!.uid}-photoURL.png",
-        (picture != null)
-            ? picture
-            : await File('assets/public/missing_profile_picture.jpg')
-                .readAsBytes(),
+        picture!,
       );
 
       UserModel user = UserModel(
