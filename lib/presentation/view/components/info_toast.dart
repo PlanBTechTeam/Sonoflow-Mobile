@@ -27,7 +27,7 @@ class _InfoToastState extends State<InfoToast> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 50,
+      top: 50,
       left: 20,
       right: 20,
       child: Material(
