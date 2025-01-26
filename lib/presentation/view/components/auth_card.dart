@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sonoflow/presentation/provider/home_provider.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
 import 'package:sonoflow/presentation/view/components/auth_input.dart';
 import 'package:sonoflow/presentation/view/components/info_toast.dart';
@@ -132,7 +133,7 @@ class _AuthCardState extends State<AuthCard> {
                   Expanded(
                     child: LoginButton(
                       text: "Entrar",
-                      onPressed: _login,
+                      onPressed: () => _login(loginEmailController.text, loginPasswordController.text),
                     ),
                   ),
                 ],
@@ -250,15 +251,12 @@ class _AuthCardState extends State<AuthCard> {
     }
 
     if (user != null) {
-      // TODO: navigate to Home
       _showInfoToast('Usuário $username registrado com sucesso.', Colors.green);
+      _login(email, password);
     }
   }
 
-  void _login() async {
-    String email = loginEmailController.text;
-    String password = loginPasswordController.text;
-
+  void _login(String email, String password) async {
     User? user;
 
     try {
@@ -274,7 +272,10 @@ class _AuthCardState extends State<AuthCard> {
 
     if (user != null) {
       _showInfoToast('Login efetuado com sucesso.', Colors.green);
-      // TODO: navigate to Home
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeProvider()),
+      );
     }
   }
 
