@@ -16,9 +16,9 @@ class _HomeProviderState extends State<HomeProvider> {
   int _currentIndex = 1;
 
   // ===== LIST SCREEN TO ROUTE
-  List<Widget> body = const [
-    DashboardScreen(),
-    HomeScreen(),
+  List<Widget> body = [
+    const DashboardScreen(),
+    const HomeScreen(),
     SettingScreen(),
   ];
 

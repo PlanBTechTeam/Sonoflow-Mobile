@@ -95,4 +95,13 @@ class FirebaseAuthService {
       rethrow;
     }
   }
+
+  /// Encerra a sessão do usuário autenticado.
+  ///
+  /// Se o usuário estiver autenticado, ele será desconectado do Firebase Authentication.
+  /// Caso contrário, nenhuma ação será realizada.
+  Future<void> signOut() async {
+    if (!isUserLoggedIn()) return;
+    await _auth.signOut();
+  }
 }
