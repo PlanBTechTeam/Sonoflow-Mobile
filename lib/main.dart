@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sonoflow/firebase_options.dart';
-import 'package:sonoflow/presentation/provider/auth_provider.dart';
+import 'package:sonoflow/presentation/view/auth/auth_screen.dart';
 import 'package:sonoflow/presentation/viewmodel/change_layer_viewmodel.dart';
 import 'package:sonoflow/presentation/viewmodel/diarycard_viewmodel.dart';
 
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthProvider(),
+      home: const AuthScreen(),
     );
   }
 }

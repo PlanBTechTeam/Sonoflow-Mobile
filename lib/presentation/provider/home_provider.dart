@@ -4,14 +4,14 @@ import 'package:sonoflow/presentation/view/dashboard/dashboard_screen.dart';
 import 'package:sonoflow/presentation/view/home/home_screen.dart';
 import 'package:sonoflow/presentation/view/settings/setting_screen.dart';
 
-class AuthProvider extends StatefulWidget {
-  const AuthProvider({super.key});
+class HomeProvider extends StatefulWidget {
+  const HomeProvider({super.key});
 
   @override
-  State<AuthProvider> createState() => _AuthProviderState();
+  State<HomeProvider> createState() => _HomeProviderState();
 }
 
-class _AuthProviderState extends State<AuthProvider> {
+class _HomeProviderState extends State<HomeProvider> {
   // ===== INDEX VALUE TO SCREEN =====
   int _currentIndex = 1;
 
