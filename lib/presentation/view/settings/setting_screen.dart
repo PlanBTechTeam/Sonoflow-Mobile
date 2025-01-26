@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:sonoflow/presentation/utils/colors.dart';
 import 'package:sonoflow/presentation/view/auth/auth_screen.dart';
+import 'package:sonoflow/presentation/view/components/info_toast.dart';
+import 'package:sonoflow/services/firebase_auth_service.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  SettingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,26 +15,31 @@ class SettingScreen extends StatelessWidget {
       children: [
         Container(
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(32), topLeft: Radius.circular(32)),
+            borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32)),
             color: Colors.white,
           ),
-          child:  Padding(
+          child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
               children: [
-
                 const Center(
                   child: Text('SETTING SCREEN'),
                 ),
-                ElevatedButton(onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
-                }, child: const Text('SAIR'))
+                ElevatedButton(
+                  onPressed: () => _signOut(context),
+                  child: const Text('SAIR'),
+                ),
               ],
             ),
           ),
         ),
       ],
     );
+  }
+
+  Future<void> _signOut(BuildContext context) async {
+    _auth.signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
+    InfoToast.show(context, 'Sessão encerrada com sucesso.', Colors.green);
   }
 }

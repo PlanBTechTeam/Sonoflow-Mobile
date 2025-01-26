@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sonoflow/presentation/provider/home_provider.dart';
 import 'package:sonoflow/presentation/utils/auth_mode.dart';
 import 'package:sonoflow/presentation/view/components/auth_input.dart';
+import 'package:sonoflow/presentation/view/components/info_toast.dart';
 import 'package:sonoflow/presentation/view/components/login_button.dart';
 import 'package:sonoflow/presentation/view/components/photo_input.dart';
 import 'package:sonoflow/presentation/view/components/toggle_auth_button.dart';
@@ -32,8 +34,7 @@ class _AuthCardState extends State<AuthCard> {
   // Função que alterna entre os modos Login e Registro.
   void _toggleAuthMode() {
     setState(() {
-      _authMode =
-          _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
+      _authMode = _authMode == AuthMode.LOGIN ? AuthMode.REGISTER : AuthMode.LOGIN;
     });
   }
 
@@ -66,17 +67,14 @@ class _AuthCardState extends State<AuthCard> {
       decoration: BoxDecoration(
           color: const Color.fromRGBO(94, 105, 128, 0.2),
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(
-              color: const Color.fromRGBO(255, 255, 255, 0.4), width: 2)),
+          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.4), width: 2)),
       child: Padding(
-        padding:
-            const EdgeInsets.only(top: 32, bottom: 32, left: 16, right: 16),
+        padding: const EdgeInsets.only(top: 32, bottom: 32, left: 16, right: 16),
         child: Column(
           children: [
             // ========== TOGGLE AUTH BUTTON ==========
             // Exibe o botão para alternar entre Login e Registro na camada inicial.
-            if (_authMode == AuthMode.LOGIN ||
-                _authMode == AuthMode.REGISTER && _registerLayer == 1) ...[
+            if (_authMode == AuthMode.LOGIN || _authMode == AuthMode.REGISTER && _registerLayer == 1) ...[
               ToggleAuthButton(
                 state: _authMode,
                 onToggle: _toggleAuthMode,
@@ -105,8 +103,7 @@ class _AuthCardState extends State<AuthCard> {
                       style: TextStyle(color: Colors.white),
                     ),
                     const Spacer(),
-                    Text('$_registerLayer/3',
-                        style: const TextStyle(color: Colors.white))
+                    Text('$_registerLayer/3', style: const TextStyle(color: Colors.white))
                   ],
                 ),
               )
@@ -136,7 +133,7 @@ class _AuthCardState extends State<AuthCard> {
                   Expanded(
                     child: LoginButton(
                       text: "Entrar",
-                      onPressed: _login,
+                      onPressed: () => _login(loginEmailController.text, loginPasswordController.text),
                     ),
                   ),
                 ],
@@ -228,16 +225,13 @@ class _AuthCardState extends State<AuthCard> {
     String password = registerPasswordController.text;
     String confirmPassword = confirmRegisterPasswordController.text;
 
-    // TODO: null checks + error messages
     if (email != confirmEmail) {
-      // TODO: error
-      print("Emails diferentes");
+      InfoToast.show(context, 'Erro: os e-mails informados são diferentes.', Colors.red);
       return;
     }
 
     if (password != confirmPassword) {
-      // TODO: error
-      print("Senhas diferentes");
+      InfoToast.show(context, 'Erro: as senhas informadas são diferentes.', Colors.red);
       return;
     }
 
@@ -252,21 +246,17 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      // TODO: error
-      print(e);
+      InfoToast.show(context, 'Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
       return;
     }
 
     if (user != null) {
-      // TODO: navigate to Home
-      print("registrado");
+      InfoToast.show(context, 'Usuário $username registrado com sucesso.', Colors.green);
+      _login(email, password);
     }
   }
 
-  void _login() async {
-    String email = loginEmailController.text;
-    String password = loginPasswordController.text;
-
+  void _login(String email, String password) async {
     User? user;
 
     try {
@@ -277,54 +267,32 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      // TODO: error
-      print(e);
+      InfoToast.show(context, 'Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
     }
 
     if (user != null) {
-      // TODO: navigate to Home
-      print("login");
+      InfoToast.show(context, 'Login efetuado com sucesso.', Colors.green);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeProvider()),
+      );
     }
   }
 
-  // TODO: error handling
   void _handleAuthErrors(String exceptionCode) {
-    switch (exceptionCode) {
-      case "email-already-in-use":
-        print(exceptionCode);
-        break;
+    String errorMessage = switch (exceptionCode) {
+      "email-already-in-use" => 'Erro: O e-mail já está em uso.',
+      "weak-password" => 'Erro: A senha deve ter ao menos 6 caracteres.',
+      "invalid-email" => 'Erro: O endereço de e-mail é inválido.',
+      "user-disabled" => 'Erro: Esta conta de usuário foi desativada.',
+      "user-not-found" => 'Erro: Não há usuário correspondente a este endereço de e-mail.',
+      "wrong-password" => 'Erro: Senha incorreta fornecida para este usuário.',
+      "too-many-requests" => 'Erro: Muitas solicitações. Tente novamente mais tarde.',
+      "invalid-credential" => 'Erro: E-mail ou senha incorretos.',
+      "channel-error" => 'Erro: Um do campos está vazio.',
+      _ => 'Ocorreu um erro desconhecido: $exceptionCode',
+    };
 
-      case "weak-password":
-        print(exceptionCode);
-        break;
-
-      case "invalid-email":
-        print(exceptionCode);
-        break;
-
-      case "user-disabled":
-        print(exceptionCode);
-        break;
-
-      case "user-not-found":
-        print(exceptionCode);
-        break;
-
-      case "wrong-password":
-        print(exceptionCode);
-        break;
-
-      case "too-many-requests":
-        print(exceptionCode);
-        break;
-
-      case "invalid-credential":
-        print(exceptionCode);
-        break;
-
-      default:
-        print(exceptionCode);
-        break;
-    }
+    InfoToast.show(context, errorMessage, Colors.red);
   }
 }
