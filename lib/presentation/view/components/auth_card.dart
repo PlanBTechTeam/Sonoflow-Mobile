@@ -226,12 +226,12 @@ class _AuthCardState extends State<AuthCard> {
     String confirmPassword = confirmRegisterPasswordController.text;
 
     if (email != confirmEmail) {
-      _showInfoToast('Erro: os e-mails informados são diferentes.', Colors.red);
+      InfoToast.show(context, 'Erro: os e-mails informados são diferentes.', Colors.red);
       return;
     }
 
     if (password != confirmPassword) {
-      _showInfoToast('Erro: as senhas informadas são diferentes.', Colors.red);
+      InfoToast.show(context, 'Erro: as senhas informadas são diferentes.', Colors.red);
       return;
     }
 
@@ -246,12 +246,12 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      _showInfoToast('Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
+      InfoToast.show(context, 'Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
       return;
     }
 
     if (user != null) {
-      _showInfoToast('Usuário $username registrado com sucesso.', Colors.green);
+      InfoToast.show(context, 'Usuário $username registrado com sucesso.', Colors.green);
       _login(email, password);
     }
   }
@@ -267,11 +267,11 @@ class _AuthCardState extends State<AuthCard> {
     } on FirebaseAuthException catch (fbException) {
       _handleAuthErrors(fbException.code);
     } catch (e) {
-      _showInfoToast('Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
+      InfoToast.show(context, 'Ocorreu um erro inesperado: ${e.toString()}', Colors.red);
     }
 
     if (user != null) {
-      _showInfoToast('Login efetuado com sucesso.', Colors.green);
+      InfoToast.show(context, 'Login efetuado com sucesso.', Colors.green);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomeProvider()),
@@ -293,19 +293,6 @@ class _AuthCardState extends State<AuthCard> {
       _ => 'Ocorreu um erro desconhecido: $exceptionCode',
     };
 
-    _showInfoToast(errorMessage, Colors.red);
-  }
-
-  void _showInfoToast(String message, Color backgroundColor) {
-    final overlay = Overlay.of(context);
-
-    final overlayEntry = OverlayEntry(
-      builder: (context) => InfoToast(
-        message: message,
-        backgroundColor: backgroundColor,
-      ),
-    );
-
-    overlay.insert(overlayEntry);
+    InfoToast.show(context, errorMessage, Colors.red);
   }
 }

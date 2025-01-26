@@ -40,14 +40,6 @@ class SettingScreen extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     _auth.signOut();
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const AuthScreen()));
-
-    final overlay = Overlay.of(context);
-    final overlayEntry = OverlayEntry(
-      builder: (context) => const InfoToast(
-        message: 'Sessão encerrada com sucesso.',
-        backgroundColor: Colors.green,
-      ),
-    );
-    overlay.insert(overlayEntry);
+    InfoToast.show(context, 'Sessão encerrada com sucesso.', Colors.green);
   }
 }

@@ -12,6 +12,19 @@ class InfoToast extends StatefulWidget {
 
   @override
   State<InfoToast> createState() => _InfoToastState();
+
+  static void show(BuildContext context, String message, Color backgroundColor) {
+    final overlay = Overlay.of(context);
+
+    final overlayEntry = OverlayEntry(
+      builder: (context) => InfoToast(
+        message: message,
+        backgroundColor: backgroundColor,
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+  }
 }
 
 class _InfoToastState extends State<InfoToast> {
