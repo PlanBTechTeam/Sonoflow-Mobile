@@ -18,7 +18,7 @@ class _HomeProviderState extends State<HomeProvider> {
   // ===== LIST SCREEN TO ROUTE
   List<Widget> body = [
     const DashboardScreen(),
-    const HomeScreen(),
+    HomeScreen(),
     SettingScreen(),
   ];
 
@@ -28,9 +28,7 @@ class _HomeProviderState extends State<HomeProvider> {
       body: Container(
         decoration: const BoxDecoration(
             color: Color.fromRGBO(12, 31, 61, 1),
-            image: DecorationImage(
-                image: AssetImage('assets/auth_background.png'),
-                fit: BoxFit.cover)),
+            image: DecorationImage(image: AssetImage('assets/auth_background.png'), fit: BoxFit.cover)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
