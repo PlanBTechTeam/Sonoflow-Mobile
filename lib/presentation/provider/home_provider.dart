@@ -44,14 +44,24 @@ class _HomeProviderState extends State<HomeProvider> {
         currentIndex: _currentIndex,
         onTap: (int newIndex) {
           setState(() {
-            _currentIndex = newIndex;
+            // TODO: remover checagem para habilitar o botão
+            if (newIndex != 0) {
+              _currentIndex = newIndex;
+            }
           });
         },
         items: <BottomNavigationBarItem>[
           // ===== DASHBOARD ICON =====
           BottomNavigationBarItem(
-            icon: Image.asset('assets/icons/dashboard.png'),
-            activeIcon: Image.asset('assets/icons/dashboard-active.png'),
+            // TODO: remover opacidade para habilitar botão
+            icon: Opacity(
+              opacity: 0.25,
+              child: Image.asset('assets/icons/dashboard.png'),
+            ),
+            activeIcon: Opacity(
+              opacity: 0.25,
+              child: Image.asset('assets/icons/dashboard-active.png'),
+            ),
             label: 'Dashboard',
           ),
 
