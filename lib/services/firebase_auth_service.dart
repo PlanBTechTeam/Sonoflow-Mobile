@@ -127,7 +127,7 @@ class FirebaseAuthService {
   ///
   /// Retorna a URL da foto de perfil associada ao usuário autenticado.
   /// Caso contrário, retorna `null`.
-  Future<String?> getPictureUrl() async {
+  Future<String?> getPhotoURL() async {
     final user = getUser();
     if (user == null) return null;
 

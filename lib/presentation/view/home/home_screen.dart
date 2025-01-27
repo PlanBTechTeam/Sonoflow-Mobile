@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                   FutureBuilder(
                     future: Future.wait([
                       _auth.getUsername(),
-                      _auth.getPictureUrl(),
+                      _auth.getPhotoURL(),
                     ]),
                     builder: (context, snapshot) {
                       switch (snapshot.connectionState) {
