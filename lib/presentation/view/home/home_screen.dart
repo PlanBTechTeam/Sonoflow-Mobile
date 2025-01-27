@@ -3,6 +3,7 @@ import 'package:sonoflow/presentation/view/components/sleep_diary_widget.dart';
 import 'package:sonoflow/presentation/view/components/sleep_quality_widget.dart';
 import 'package:sonoflow/presentation/view/components/welcome_widget.dart';
 import 'package:sonoflow/presentation/utils/colors.dart';
+import 'package:sonoflow/services/firebase_auth_service.dart';
 
 /// HOME SCREEN
 ///
@@ -13,7 +14,9 @@ import 'package:sonoflow/presentation/utils/colors.dart';
 /// Esta tela é organizada em uma coluna que alinha os
 /// widgets na parte inferior da tela.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final FirebaseAuthService _auth = FirebaseAuthService();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,44 +26,67 @@ class HomeScreen extends StatelessWidget {
         Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+              topLeft: Radius.circular(32),
+              topRight: Radius.circular(32),
+            ),
             color: AppColors.ghostWhite,
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(32.0),
+          child: Padding(
+            padding: const EdgeInsets.all(32.0),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ===== WELCOME WIDGET =====
-                  WelcomeWidget(
-                    username: "João Gabriel",
-                    photoURL: "assets/public/img_default.png",
+                  FutureBuilder(
+                    future: Future.wait([
+                      _auth.getUsername(),
+                      _auth.getPhotoURL(),
+                    ]),
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return const CircularProgressIndicator();
+                        case ConnectionState.done:
+                          return (snapshot.hasError)
+                              ? const Text("Erro ao carregar informações do usuário.")
+                              : WelcomeWidget(
+                                  username: snapshot.data![0]!,
+                                  photoURL: snapshot.data![1]!,
+                                );
+                        default:
+                          return const SizedBox.shrink();
+                      }
+                    },
                   ),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // ===== SLEEP DIARY =====
-                  Text("Diário do Sono",
-                      style: TextStyle(
-                        color: AppColors.midnightBlue,
-                        fontWeight: FontWeight.bold,
-                      )),
+                  const Text(
+                    "Diário do Sono",
+                    style: TextStyle(
+                      color: AppColors.midnightBlue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-                  SleepDiaryWidget(),
+                  const SleepDiaryWidget(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // ===== LAST METRICS =====
-                  Text("Métricas dos últimos 7 dias",
-                      style: TextStyle(
-                        color: AppColors.midnightBlue,
-                        fontWeight: FontWeight.bold,
-                      )),
+                  const Text(
+                    "Métricas dos últimos 7 dias",
+                    style: TextStyle(
+                      color: AppColors.midnightBlue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                  Row(
+                  const Row(
                     children: [
                       SleepQualityWidget(
                         value: 64,
@@ -68,9 +94,9 @@ class HomeScreen extends StatelessWidget {
                       SizedBox(width: 30),
                       SleepQualityWidget(
                         value: 10,
-                      )
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

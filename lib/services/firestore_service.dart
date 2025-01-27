@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sonoflow/models/diary_model.dart';
 import 'package:sonoflow/models/user_model.dart';
 
 /// Serviço de integração com o Firestore.
@@ -17,15 +18,13 @@ class FirestoreService {
   ///
   /// Exceções:
   /// - Pode lançar uma `FirebaseException` em caso de falha na escrita dos dados.
-  Future<void> registerUser(UserModel user) async =>
-      await _db.collection("users").doc(user.uid).set({
+  Future<void> registerUser(UserModel user) async => await _db.collection("users").doc(user.uid).set({
         "uid": user.uid,
         "username": user.username,
         "email": user.email,
         "registrationDate": user.registrationDate,
         "sleepGoal": user.sleepGoal,
         "photoURL": user.photoUrl,
-        // TODO: diaries
       });
 
   /// Obtém os dados de um usuário específico do Firestore.
@@ -34,13 +33,22 @@ class FirestoreService {
   ///
   /// Retorna um `Map<String, dynamic>` contendo os dados do usuário ou lança
   /// uma exceção em caso de falha.
-  ///
-  /// TODO: refatorar para usar DTOs
   Future<Map<String, dynamic>> getUserData(User user) async {
     DocumentSnapshot data = await _db.collection("users").doc(user.uid).get();
     Map<String, dynamic> dataMap = data.data() as Map<String, dynamic>;
     return dataMap;
   }
 
-// TODO: saveDiary
+  /// Salva um diário de sono no Firestore para um usuário específico.
+  ///
+  /// Armazena as informações de um diário de sono de um usuário
+  /// na coleção `diaries` dentro do documento do usuário correspondente,
+  /// utilizando o ID do usuário para criar o caminho correto no Firestore.
+  ///
+  /// [user]: O usuário que está registrando o diário. Deve ser um objeto `User` com o UID único do usuário.<br>
+  /// [diary]: O diário de sono a ser salvo. Deve ser um objeto `DiaryModel` contendo todos os dados necessários.
+  ///
+  /// Não retorna nenhum valor e pode lançar exceções em caso de erro ao interagir com o Firestore.
+  Future<void> saveDiary(User user, DiaryModel diary) async =>
+      await _db.collection("users").doc(user.uid).collection("diaries").add(diary.toMap());
 }

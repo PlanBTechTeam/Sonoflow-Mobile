@@ -15,7 +15,13 @@ class FirebaseAuthService {
   /// Verifica se o usuário está autenticado.
   ///
   /// Retorna `true` se o usuário estiver logado, caso contrário, retorna `false`.
-  bool isUserLoggedIn() => _auth.currentUser != null;
+  bool isUserLoggedIn() => getUser() != null;
+
+  /// Obtém o usuário autenticado.
+  ///
+  /// Retorna o objeto [User] atualmente autenticado pelo Firebase.
+  /// Caso nenhum usuário esteja autenticado, retorna `null`.
+  User? getUser() => _auth.currentUser;
 
   /// Registra um novo usuário com as informações fornecidas.
   ///
@@ -103,5 +109,29 @@ class FirebaseAuthService {
   Future<void> signOut() async {
     if (!isUserLoggedIn()) return;
     await _auth.signOut();
+  }
+
+  /// Retorna o nome de usuário do Firestore.
+  ///
+  /// Retorna o [username] do usuário autenticado.
+  /// Caso contrário, retorna `null`.
+  Future<String?> getUsername() async {
+    final user = getUser();
+    if (user == null) return null;
+
+    final data = await _firestoreService.getUserData(user);
+    return data["username"] as String?;
+  }
+
+  /// Retorna a URL da foto de perfil do Firestore.
+  ///
+  /// Retorna a URL da foto de perfil associada ao usuário autenticado.
+  /// Caso contrário, retorna `null`.
+  Future<String?> getPhotoURL() async {
+    final user = getUser();
+    if (user == null) return null;
+
+    final data = await _firestoreService.getUserData(user);
+    return data["photoURL"] as String?;
   }
 }
