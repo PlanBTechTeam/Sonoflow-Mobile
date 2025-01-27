@@ -51,8 +51,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   @override
   Widget build(BuildContext context) {
     // Obtém o ViewModel que gerencia as camadas da interface
-    ChangeLayerViewmodel layerViewModel =
-        Provider.of<ChangeLayerViewmodel>(context);
+    ChangeLayerViewmodel layerViewModel = Provider.of<ChangeLayerViewmodel>(context);
 
     // Obtém o ViewModel que gerencia os cartões do diário
     DiaryCardViewModel cardViewModel = Provider.of<DiaryCardViewModel>(context);
@@ -82,8 +81,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       // Depois de ir para a cama, qual foi o horário que você decidiu tentar dormir?
       {
         'layer': 1,
-        'title':
-            'Depois de ir para a cama, qual foi o horário que você decidiu tentar dormir?',
+        'title': 'Depois de ir para a cama, qual foi o horário que você decidiu tentar dormir?',
         'value': _sleepAttemptTime.value,
         'type': InputType.time,
         'onPressed': () {
@@ -132,8 +130,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       // Quanto tempo você acha que demorou até pegar no sono novamente?
       {
         'layer': 2,
-        'title':
-            'Quanto tempo você acha que demorou até pegar no sono novamente?',
+        'title': 'Quanto tempo você acha que demorou até pegar no sono novamente?',
         'value': _timeToFallAsleepAgain,
         'type': InputType.select,
         'options': const [
@@ -235,8 +232,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       // Selecione os fatores que estiveram presentes durante o seu dia e antes de você ir dormir
       {
         'layer': 6,
-        'title':
-            'Selecione os fatores que estiveram presentes durante o seu dia e antes de você ir dormir',
+        'title': 'Selecione os fatores que estiveram presentes durante o seu dia e antes de você ir dormir',
         'valueList': _techniquesUsedToday,
         'type': InputType.choiceChip,
         'options': const [
@@ -280,8 +276,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
       // Selecione os fatores que estiveram presentes antes de dormir:
       {
         'layer': 8,
-        'title':
-            'Selecione os fatores que estiveram presentes antes de dormir:',
+        'title': 'Selecione os fatores que estiveram presentes antes de dormir:',
         'valueList': _negativeFactorsToday,
         'type': InputType.choiceChip,
         'options': const [
@@ -390,45 +385,41 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   child: Column(
                     children: [
                       Expanded(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ...cards
-                              .where((card) =>
-                                  card['layer'] == layerViewModel.layer)
-                              .map((card) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 32.0),
-                              child: DiaryCardWidget(
-                                title: card['title'] ?? '',
-                                value: card['value'] ?? '',
-                                type: card['type'],
-                                boolValue: card['boolValue'] ?? false,
-                                stringValueController:
-                                    card['stringValueController'],
+                          child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ...cards.where((card) => card['layer'] == layerViewModel.layer).map((card) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 32.0),
+                                child: DiaryCardWidget(
+                                  title: card['title'] ?? '',
+                                  value: card['value'] ?? '',
+                                  type: card['type'],
+                                  boolValue: card['boolValue'] ?? false,
+                                  stringValueController: card['stringValueController'],
 
-                                // Propriedades relacionadas ao valor
-                                doubleValue: card['doubleValue'] as double?,
-                                doubleonChange:
-                                    card['doubleonChange'] as Function(double)?,
+                                  // Propriedades relacionadas ao valor
+                                  doubleValue: card['doubleValue'] as double?,
+                                  doubleonChange: card['doubleonChange'] as Function(double)?,
 
-                                // Propriedades relacionadas à seleção
-                                options:
-                                    List<String>.from(card['options'] ?? []),
-                                valueList: card['valueList'] ?? [],
+                                  // Propriedades relacionadas à seleção
+                                  options: List<String>.from(card['options'] ?? []),
+                                  valueList: card['valueList'] ?? [],
 
-                                // Propriedades de interação
-                                onPressed: card['onPressed'] as Function()?,
-                                onPressed2: card['onPressed2'] as Function()?,
-                                onChange: card['onChange'] as Function(String)?,
+                                  // Propriedades de interação
+                                  onPressed: card['onPressed'] as Function()?,
+                                  onPressed2: card['onPressed2'] as Function()?,
+                                  onChange: card['onChange'] as Function(String)?,
 
-                                // Ícones do slider
-                                sliderIcon_1: card['sliderIcon_1'],
-                                sliderIcon_2: card['sliderIcon_2'],
-                              ),
-                            );
-                          }),
-                        ],
+                                  // Ícones do slider
+                                  sliderIcon_1: card['sliderIcon_1'],
+                                  sliderIcon_2: card['sliderIcon_2'],
+                                ),
+                              );
+                            }),
+                          ],
+                        ),
                       )),
                       const SliderWidget(),
                     ],
@@ -446,8 +437,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   /// Constrói a AppBar personalizada para a tela do diário.
   /// - Exibe um botão de voltar, que retorna à camada anterior ou sai da tela.
   /// - Exibe o título da camada atual baseado no `layerViewModel`.
-  Widget _buildAppBar(
-      BuildContext context, ChangeLayerViewmodel layerViewModel) {
+  Widget _buildAppBar(BuildContext context, ChangeLayerViewmodel layerViewModel) {
     return Padding(
       padding: const EdgeInsets.only(top: 55),
       child: Padding(
@@ -486,8 +476,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   /// Constrói a camada de boas-vindas (primeira camada) do diário.
   /// - Exibe uma mensagem encorajando o usuário a iniciar o diário do sono.
   /// - Exibe um botão que, ao ser pressionado, avança para a próxima camada.
-  Widget _buildWelcomeLayer(
-      BuildContext context, ChangeLayerViewmodel layerViewModel) {
+  Widget _buildWelcomeLayer(BuildContext context, ChangeLayerViewmodel layerViewModel) {
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
@@ -512,7 +501,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     borderRadius: BorderRadius.circular(16),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                        color: Colors.black.withValues(alpha: 0.05),
                         offset: const Offset(0, 4),
                         blurRadius: 8,
                         spreadRadius: 1,
@@ -540,8 +529,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           ),
                           padding: const EdgeInsets.all(16),
                           child: const Image(
-                            image: AssetImage(
-                                "assets/public/img_sleep_diary_man_2_vector.png"),
+                            image: AssetImage("assets/public/img_sleep_diary_man_2_vector.png"),
                           ),
                         ),
                       ],
@@ -562,10 +550,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           });
                         },
                         style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(AppColors.goldenYellow),
-                          minimumSize:
-                              WidgetStateProperty.all(const Size(0, 80)),
+                          backgroundColor: WidgetStateProperty.all(AppColors.goldenYellow),
+                          minimumSize: WidgetStateProperty.all(const Size(0, 80)),
                         ),
                         child: const Text(
                           "Iniciar questionário",
