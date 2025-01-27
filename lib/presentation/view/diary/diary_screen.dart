@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sonoflow/models/input_type.dart';
+import 'package:sonoflow/presentation/provider/home_provider.dart';
 import 'package:sonoflow/presentation/utils/colors.dart';
+import 'package:sonoflow/presentation/view/components/info_toast.dart';
 import 'package:sonoflow/presentation/view/components/slider_widget.dart';
 import 'package:sonoflow/presentation/view/diary/components/diary_card_widget.dart';
 import 'package:sonoflow/presentation/viewmodel/change_layer_viewmodel.dart';
@@ -48,13 +50,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
   final TextEditingController _additionalComments = TextEditingController();
   double _sleepFlowDedication = 50;
 
+  late DiaryCardViewModel cardViewModel;
+
   @override
   Widget build(BuildContext context) {
     // Obtém o ViewModel que gerencia as camadas da interface
     ChangeLayerViewmodel layerViewModel = Provider.of<ChangeLayerViewmodel>(context);
 
     // Obtém o ViewModel que gerencia os cartões do diário
-    DiaryCardViewModel cardViewModel = Provider.of<DiaryCardViewModel>(context);
+    cardViewModel = Provider.of<DiaryCardViewModel>(context);
 
     final List<Map<String, dynamic>> cards = [
       // LAYER 1
@@ -599,5 +603,40 @@ class _DiaryScreenState extends State<DiaryScreen> {
         time.value = newTime;
       });
     }
+  }
+
+  void _saveDiary() async {
+    try {
+      await cardViewModel.saveDiary(
+        sleepDate: _sleepDate,
+        bedTime: _bedtime.value,
+        sleepAttemptTime: _sleepAttemptTime.value,
+        timeToFallAsleep: _timeToFallAsleep,
+        nightAwakenings: _nightAwakenings,
+        timeToFallAsleepAgain: _timeToFallAsleepAgain,
+        lastWakeUpTime: _lastWakeUpTime.value,
+        wakeUpTime: _wakeUpTime.value,
+        anxietyComparisonToday: _anxietyComparisonToday,
+        fatigueReduction: _fatigueReduction,
+        stressComparisonToday: _stressComparisonToday,
+        morningFeeling: _morningFeeling,
+        techniquesUsedToday: _techniquesUsedToday,
+        positiveFactorsToday: _positiveFactorsToday,
+        negativeFactorsToday: _negativeFactorsToday,
+        sleepFactors: _sleepFactors,
+        medicationUsageYesterday: _medicationUsageYesterday,
+        additionalComments: _additionalComments.text,
+        sleepFlowDedication: _sleepFlowDedication,
+      );
+    } catch (e) {
+      InfoToast.show(context, 'Erro inesperado ao enviar o diário: ${e.toString()}', Colors.red);
+      return;
+    }
+
+    InfoToast.show(context, 'Diário enviado com sucesso.', Colors.green);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const HomeProvider()),
+    );
   }
 }
