@@ -425,11 +425,26 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           ],
                         ),
                       )),
+                      if (layerViewModel.layer == 11)
+                        ElevatedButton(
+                          onPressed: () => _saveDiary(),
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(AppColors.goldenYellow),
+                            minimumSize: WidgetStateProperty.all(const Size(0, 45)),
+                          ),
+                          child: const Text(
+                            "Enviar questionário",
+                            style: TextStyle(
+                              color: AppColors.midnightBlue,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       const SliderWidget(),
                     ],
                   ),
                 ),
-              )
+              ),
           ],
         ),
       ),
@@ -634,7 +649,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
     }
 
     InfoToast.show(context, 'Diário enviado com sucesso.', Colors.green);
-    Navigator.pushReplacement(
+    Navigator.pop(
       context,
       MaterialPageRoute(builder: (context) => const HomeProvider()),
     );
