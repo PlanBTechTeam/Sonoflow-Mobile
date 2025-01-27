@@ -43,7 +43,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   double _anxietyComparisonToday = 50;
   double _fatigueReduction = 50;
-  final double _stressComparisonToday = 50;
+  double _stressComparisonToday = 50;
   double _morningFeeling = 50;
 
   bool _medicationUsageYesterday = false;
@@ -213,7 +213,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
         'sliderIcon_2': '😡 + estresse',
         'doubleonChange': (newValue) {
           setState(() {
-            _fatigueReduction = newValue;
+            _stressComparisonToday = newValue;
           });
         },
       },
